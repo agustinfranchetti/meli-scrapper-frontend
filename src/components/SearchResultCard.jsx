@@ -13,13 +13,22 @@ import {
 } from "@chakra-ui/react";
 
 export const SearchResultCard = ({ searchResult }) => {
-  console.log(searchResult);
   const { title, description, image_url, price, url, extras, free_shipping } =
     searchResult;
   let extrasToShow = extras;
-  if (extras.length > 2) {
+  let freeShipping = free_shipping;
+
+  //if "envio gratis" is in the extras, free_shipping will be true
+  //and we will remove it from the extras
+  if (extras.includes("Envío gratis")) {
+    freeShipping = true;
+    console.log("EXTRAS", extras);
+    extrasToShow = extras.filter((extra) => extra !== "Envío gratis");
+  }
+
+  if (extrasToShow.length > 2) {
     //merge every 3 elements into a single string
-    extrasToShow = extras.reduce((acc, curr, index) => {
+    extrasToShow = extrasToShow.reduce((acc, curr, index) => {
       if (index % 3 === 0) {
         acc.push(curr);
       } else {
@@ -28,7 +37,6 @@ export const SearchResultCard = ({ searchResult }) => {
       return acc;
     }, []);
   }
-
   return (
     <Card
       maxW="sm"
@@ -61,7 +69,7 @@ export const SearchResultCard = ({ searchResult }) => {
           {extrasToShow.map((extra, index) => (
             <Text key={index}>{extra}</Text>
           ))}
-          {free_shipping && <Text>Free Shipping</Text>}
+          {freeShipping && <Text>Free Shipping</Text>}
         </Stack>
       </CardBody>
       <Divider />
