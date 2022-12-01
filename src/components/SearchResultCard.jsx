@@ -18,11 +18,15 @@ export const SearchResultCard = ({ searchResult }) => {
     searchResult;
   let extrasToShow = extras;
   if (extras.length > 2) {
-    // join every three elements with a comma
-    extrasToShow = extras
-      .map((e, i) => (i % 3 ? e : e + ", "))
-      .join("")
-      .slice(0, -2);
+    //merge every 3 elements into a single string
+    extrasToShow = extras.reduce((acc, curr, index) => {
+      if (index % 3 === 0) {
+        acc.push(curr);
+      } else {
+        acc[acc.length - 1] = acc[acc.length - 1] + " " + curr;
+      }
+      return acc;
+    }, []);
   }
 
   return (
@@ -54,7 +58,7 @@ export const SearchResultCard = ({ searchResult }) => {
           <Text color="blue.600" fontSize="2xl">
             {price}
           </Text>
-          {extras.map((extra, index) => (
+          {extrasToShow.map((extra, index) => (
             <Text key={index}>{extra}</Text>
           ))}
           {free_shipping && <Text>Free Shipping</Text>}
