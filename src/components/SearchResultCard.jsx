@@ -16,6 +16,15 @@ export const SearchResultCard = ({ searchResult }) => {
   console.log(searchResult);
   const { title, description, image_url, price, url, extras, free_shipping } =
     searchResult;
+  let extrasToShow = extras;
+  if (extras.length > 2) {
+    // join every three elements with a comma
+    extrasToShow = extras
+      .map((e, i) => (i % 3 ? e : e + ", "))
+      .join("")
+      .slice(0, -2);
+  }
+
   return (
     <Card
       maxW="sm"
